@@ -35,7 +35,7 @@ public class UploadServicesEndpoint<D extends EndpointDefinition> extends Abstra
     @POST
     @Path("/uploadFile")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.TEXT_PLAIN})
     @ApiOperation(value = "Upload file to Magnolia.", notes = "Upload file.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
@@ -56,6 +56,26 @@ public class UploadServicesEndpoint<D extends EndpointDefinition> extends Abstra
         return Response.ok().entity("File successfully uploaded.\n").build();
     }
 
+    @POST
+    @Path("/uploadFileData")
+    @Consumes({MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    @ApiOperation(value = "Post file data inline.", notes = "Upload file by providing inline data.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST")
+    })
+    public Response uploadFileData(String data) throws Exception {
+        log.info("uploadFileData - received data:\n" + data + "\n");
 
-    
+        try {
+            // do something useful with the data...
+        } catch (Exception e) {
+            log.error("Problem while parsing inline data.", e);
+            return Response.status(Response.Status.BAD_REQUEST).entity("ERROR: Problem while parsing inline data: " + e.getMessage() + ".\n").build();
+        }
+
+        return Response.ok().entity("Inline data successfully received.\n").build();
+    }
+
 }
